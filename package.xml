@@ -19,12 +19,12 @@
   <build_depend>geometry_msgs</build_depend>
   <build_depend>nav_msgs</build_depend>
   <build_depend>std_srvs</build_depend>
-  <build_depend>trajecty_msgs</build_depend>
   <build_depend>youbot_driver</build_depend>
   <build_depend>control_msgs</build_depend>
   <build_depend>actionlib</build_depend>
   <build_depend>diagnostic_msgs</build_depend>
   <build_depend>pr2_msgs</build_depend>
+  <build_depend>trajectory_msgs</build_depend>
 
   <run_depend>pr2_msgs</run_depend>
   <run_depend>std_msgs</run_depend>
