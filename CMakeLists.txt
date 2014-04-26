@@ -50,7 +50,7 @@ add_custom_command(TARGET youbot_driver_ros_interface POST_BUILD
     #COMMAND sudo setcap cap_net_raw+ep youbot_oodl
     COMMAND ${SUDO_COMMAND} setcap cap_net_raw+ep $<TARGET_FILE:youbot_driver_ros_interface>
 )    
-endif(USE_SETCAP)
+endif()
 
 #test programs
 add_executable(youbot_arm_test 
