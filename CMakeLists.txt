@@ -43,7 +43,7 @@ option(USE_SETCAP "Set permissions to access ethernet interface without sudo" ON
 set(SUDO_COMMAND gksudo)
 if($ENV{USE_NORMAL_SUDO})
     set(SUDO_COMMAND sudo)
-if($ENV{USE_NORMAL_SUDO})
+endif()
 
 if(USE_SETCAP)
 add_custom_command(TARGET youbot_driver_ros_interface POST_BUILD
