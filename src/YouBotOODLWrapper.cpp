@@ -100,6 +100,7 @@ void YouBotOODLWrapper::initializeBase(std::string baseName)
 
     /* setup input/output communication */
     youBotConfiguration.baseConfiguration.baseCommandSubscriber = node.subscribe("cmd_vel", 1000, &YouBotOODLWrapper::baseCommandCallback, this);
+    youBotConfiguration.baseConfiguration.baseCommandSubscriber = node.subscribe("cmd_wrench", 1000, &YouBotOODLWrapper::baseWrenchCallback, this);
     youBotConfiguration.baseConfiguration.baseOdometryPublisher = node.advertise<nav_msgs::Odometry > ("odom", 1);
     youBotConfiguration.baseConfiguration.baseJointStatePublisher = node.advertise<sensor_msgs::JointState > ("base/joint_states", 1);
 
@@ -326,6 +327,21 @@ void YouBotOODLWrapper::stop()
 
     youbot::EthercatMaster::destroy();
 }
+
+void YouBotOODLWrapper::baseWrenchCallback(const geometry_msgs::Wrencht& youbotWrenchCommand){
+	
+	if (youBotConfiguration.hasBase){
+		
+		ROS_WARN("No interface present yet \n");
+	}
+	else
+    {
+        ROS_ERROR("No base initialized!");
+    }
+	
+	
+}
+
 
 void YouBotOODLWrapper::baseCommandCallback(const geometry_msgs::Twist& youbotBaseCommand)
 {
@@ -1268,3 +1284,4 @@ void YouBotOODLWrapper::publishArmAndBaseDiagnostics(double publish_rate_in_secs
 } // namespace youBot
 
 /* EOF */
+

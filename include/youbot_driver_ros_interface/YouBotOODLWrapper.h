@@ -126,6 +126,13 @@ public:
      */
     void baseCommandCallback(const geometry_msgs::Twist& youbotBaseCommand);
 
+        /**
+     * @brief Callback that is executed when a commend for the base comes in.
+     * @param youbotWrenchCommand Message that contains the desired wrench for the base.
+     */
+    void baseWrenchCallback(const geometry_msgs::Wrencht& youbotWrenchCommand);
+
+
     /**
      * @deprecated
      * @brief Callback that is executed when a commend for the arm comes in.
