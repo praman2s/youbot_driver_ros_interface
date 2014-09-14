@@ -49,6 +49,7 @@
 
 /* ROS includes */
 #include "geometry_msgs/Twist.h"
+#include "geometry_msgs/Wrench.h"
 #include "tf/transform_broadcaster.h"
 #include "nav_msgs/Odometry.h"
 #include "std_srvs/Empty.h"
@@ -130,7 +131,7 @@ public:
      * @brief Callback that is executed when a commend for the base comes in.
      * @param youbotWrenchCommand Message that contains the desired wrench for the base.
      */
-    void baseWrenchCallback(const geometry_msgs::Wrencht& youbotWrenchCommand);
+    void baseWrenchCallback(const geometry_msgs::Wrench& youbotWrenchCommand);
 
 
     /**

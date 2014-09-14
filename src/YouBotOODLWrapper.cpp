@@ -328,11 +328,29 @@ void YouBotOODLWrapper::stop()
     youbot::EthercatMaster::destroy();
 }
 
-void YouBotOODLWrapper::baseWrenchCallback(const geometry_msgs::Wrencht& youbotWrenchCommand){
+void YouBotOODLWrapper::baseWrenchCallback(const geometry_msgs::Wrench& youbotWrenchCommand){
 	
 	if (youBotConfiguration.hasBase){
+	
+		quantity<si::force> fx;
+        	quantity<si::force> fy;
+        	quantity<si::torque> torquez;
 		
-		ROS_WARN("No interface present yet \n");
+		fx = youbotWrenchCommand.force.x * newton;
+        	fy = youbotWrenchCommand.force.x * newton;
+        	torquez = youbotWrenchCommand.torque.z * newton_meter;
+
+	try
+        {
+            youBotConfiguration.baseConfiguration.youBotBase->setBaseWrench(fx, fy, torquez);
+        }
+        catch (std::exception& e)
+        {
+            std::string errorMessage = e.what();
+            ROS_WARN("Cannot set base forces: %s", errorMessage.c_str());
+        }
+		
+		//ROS_WARN("No interface present yet \n");
 	}
 	else
     {
