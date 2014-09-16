@@ -100,7 +100,7 @@ void YouBotOODLWrapper::initializeBase(std::string baseName)
 
     /* setup input/output communication */
     youBotConfiguration.baseConfiguration.baseCommandSubscriber = node.subscribe("cmd_vel", 1000, &YouBotOODLWrapper::baseCommandCallback, this);
-    ros::Subscriber baseWrenchSubscriber = node.subscribe("cmd_wrench", 1000, &YouBotOODLWrapper::baseWrenchCallback, this);
+    youBotConfiguration.baseConfiguration.baseWrenchSubscriber = node.subscribe("cmd_wrench", 1000, &YouBotOODLWrapper::baseWrenchCallback, this);
     youBotConfiguration.baseConfiguration.baseOdometryPublisher = node.advertise<nav_msgs::Odometry > ("odom", 1);
     youBotConfiguration.baseConfiguration.baseJointStatePublisher = node.advertise<sensor_msgs::JointState > ("base/joint_states", 1);
 
