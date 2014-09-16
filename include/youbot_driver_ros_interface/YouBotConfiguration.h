@@ -84,6 +84,8 @@ public:
     // receives wrench message for the "base"
     ros::Subscriber baseWrenchSubscriber;
 
+    // publishes robot internal force
+    ros::Publisher baseWrenchPublisher;
 
     /// Publishes Odometry messages
     ros::Publisher baseOdometryPublisher;

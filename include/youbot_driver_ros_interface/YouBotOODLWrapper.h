@@ -50,6 +50,7 @@
 /* ROS includes */
 #include "geometry_msgs/Twist.h"
 #include "geometry_msgs/Wrench.h"
+#include "geometry_msgs/WrenchStamped.h"
 #include "tf/transform_broadcaster.h"
 #include "nav_msgs/Odometry.h"
 #include "std_srvs/Empty.h"
@@ -127,11 +128,16 @@ public:
      */
     void baseCommandCallback(const geometry_msgs::Twist& youbotBaseCommand);
 
-        /**
+    /**
      * @brief Callback that is executed when a commend for the base comes in.
      * @param youbotWrenchCommand Message that contains the desired wrench for the base.
      */
     void baseWrenchCallback(const geometry_msgs::Wrench& youbotWrenchCommand);
+	
+    /*
+     * @brief Callback that is executed when a commend for the base comes in.
+     */
+    void computeRobotWrench(sensor_msgs::JointState effort);
 
 
     /**
@@ -262,6 +268,9 @@ private:
 
     /// The published joint state of the base (wheels) with angles in [RAD] and velocities in [RAD/s]
     sensor_msgs::JointState baseJointStateMessage;
+    
+    // Publishes robot wrench in fx fy and tz
+    geometry_msgs::WrenchStamped baseWrenchMessage;
 
     /// Vector of the published joint states of per arm with angles in [RAD]
     vector<sensor_msgs::JointState> armJointStateMessages;

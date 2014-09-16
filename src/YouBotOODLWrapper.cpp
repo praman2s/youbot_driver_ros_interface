@@ -102,6 +102,7 @@ void YouBotOODLWrapper::initializeBase(std::string baseName)
     youBotConfiguration.baseConfiguration.baseCommandSubscriber = node.subscribe("cmd_vel", 1000, &YouBotOODLWrapper::baseCommandCallback, this);
     youBotConfiguration.baseConfiguration.baseWrenchSubscriber = node.subscribe("cmd_wrench", 1000, &YouBotOODLWrapper::baseWrenchCallback, this);
     youBotConfiguration.baseConfiguration.baseOdometryPublisher = node.advertise<nav_msgs::Odometry > ("odom", 1);
+    youBotConfiguration.baseConfiguration.baseWrenchPublisher = node.advertise<geometry_msgs::WrenchStamped > ("robot_wrench", 1);
     youBotConfiguration.baseConfiguration.baseJointStatePublisher = node.advertise<sensor_msgs::JointState > ("base/joint_states", 1);
 
     /* setup services*/
@@ -797,6 +798,36 @@ void YouBotOODLWrapper::gripperPositionsCommandCallback(const brics_actuator::Jo
 	}
 }
 
+
+void YouBotOODLWrapper::computeRobotWrench(sensor_msgs::JointState effort)
+{
+
+	try{
+      
+        /* Set up wrench tf */
+
+       
+        /* Fill the wrench values */
+         baseWrenchMessage.header.stamp = currentTime;
+         baseWrenchMessage.header.frame_id = youBotOdometryFrameID;
+         baseWrenchMessage.wrench.force.x = 0.01;
+	 baseWrenchMessage.wrench.force.y = 0.01;
+	 baseWrenchMessage.wrench.force.z = 0.0;
+	 baseWrenchMessage.wrench.torque.x = 0.0;
+         baseWrenchMessage.wrench.torque.y = 0.0;
+         baseWrenchMessage.wrench.torque.z = 0.01;
+         
+
+
+	}
+        catch (std::exception& e)
+	{
+		ROS_WARN_ONCE("%s", e.what());
+	}
+	
+
+}
+
 void YouBotOODLWrapper::computeOODLSensorReadings()
 {
 
@@ -884,7 +915,7 @@ void YouBotOODLWrapper::computeOODLSensorReadings()
             baseJointStateMessage.velocity[i] = currentVelocity.angularVelocity.value();
             baseJointStateMessage.effort[i] = currentTorque.torque.value();
         }
-
+        computeRobotWrench(baseJointStateMessage);
         /*
          * Here we add values for "virtual" rotation joints in URDF - robot_state_publisher can't
          * handle non-aggregated jointState messages well ...
@@ -1025,6 +1056,7 @@ void YouBotOODLWrapper::publishOODLSensorReadings()
         youBotConfiguration.baseConfiguration.odometryBroadcaster.sendTransform(odometryTransform);
         youBotConfiguration.baseConfiguration.baseOdometryPublisher.publish(odometryMessage);
         youBotConfiguration.baseConfiguration.baseJointStatePublisher.publish(baseJointStateMessage);
+        youBotConfiguration.baseConfiguration.baseWrenchPublisher.publish(baseWrenchMessage);
     }
 
     if (youBotConfiguration.hasArms)
