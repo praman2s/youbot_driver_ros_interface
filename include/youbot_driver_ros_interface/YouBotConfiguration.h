@@ -80,6 +80,9 @@ public:
 
     /// Receives Twist messages for the base.
     ros::Subscriber baseCommandSubscriber;
+    
+    // receives wrench message for the "base"
+    ros::Subscriber baseWrenchSubscriber;
 
 
     /// Publishes Odometry messages
