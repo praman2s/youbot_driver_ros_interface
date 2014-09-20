@@ -84,6 +84,9 @@ public:
     // receives wrench message for the "base"
     ros::Subscriber baseWrenchSubscriber;
 
+    // receives torques message for the "base"
+    ros::Subscriber baseAccelerationSubscriber;
+
     // publishes robot internal force
     ros::Publisher baseWrenchPublisher;
 

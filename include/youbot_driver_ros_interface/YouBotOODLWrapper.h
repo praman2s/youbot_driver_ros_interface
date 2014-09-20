@@ -49,6 +49,8 @@
 
 /* ROS includes */
 #include "geometry_msgs/Twist.h"
+#include "geometry_msgs/Vector3Stamped.h"
+#include "geometry_msgs/Vector3.h"
 #include "geometry_msgs/Wrench.h"
 #include "geometry_msgs/WrenchStamped.h"
 #include "tf/transform_broadcaster.h"
@@ -128,6 +130,7 @@ public:
      */
     void baseCommandCallback(const geometry_msgs::Twist& youbotBaseCommand);
 
+    void baseAccelerationCallback(const geometry_msgs::Vector3& acceleration);
     /**
      * @brief Callback that is executed when a commend for the base comes in.
      * @param youbotWrenchCommand Message that contains the desired wrench for the base.
@@ -276,10 +279,10 @@ private:
     vector<sensor_msgs::JointState> armJointStateMessages;
 
     /// The joint trajectory goal that is currently active.
-	actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction>::GoalHandle armActiveJointTrajectoryGoal;
+    actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction>::GoalHandle armActiveJointTrajectoryGoal;
 
-	/// Tell if a goal is currently active.
-	bool armHasActiveJointTrajectoryGoal;
+   /// Tell if a goal is currently active.
+   bool armHasActiveJointTrajectoryGoal;
 
 	youbot::GripperSensedBarPosition gripperBar1Position;
 	youbot::GripperSensedBarPosition gripperBar2Position;

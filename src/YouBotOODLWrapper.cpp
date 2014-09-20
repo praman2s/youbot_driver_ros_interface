@@ -100,6 +100,7 @@ void YouBotOODLWrapper::initializeBase(std::string baseName)
 
     /* setup input/output communication */
     youBotConfiguration.baseConfiguration.baseCommandSubscriber = node.subscribe("cmd_vel", 1000, &YouBotOODLWrapper::baseCommandCallback, this);
+    youBotConfiguration.baseConfiguration.baseAccelerationSubscriber = node.subscribe("cmd_accel", 1000, &YouBotOODLWrapper::baseAccelerationCallback, this);
     youBotConfiguration.baseConfiguration.baseWrenchSubscriber = node.subscribe("cmd_wrench", 1000, &YouBotOODLWrapper::baseWrenchCallback, this);
     youBotConfiguration.baseConfiguration.baseOdometryPublisher = node.advertise<nav_msgs::Odometry > ("odom", 1);
     youBotConfiguration.baseConfiguration.baseWrenchPublisher = node.advertise<geometry_msgs::WrenchStamped > ("robot_wrench", 1);
@@ -327,6 +328,38 @@ void YouBotOODLWrapper::stop()
     armJointStateMessages.clear();
 
     youbot::EthercatMaster::destroy();
+}
+
+
+void YouBotOODLWrapper::baseAccelerationCallback(const geometry_msgs::Vector3& acceleration){
+
+	if (youBotConfiguration.hasBase){
+	
+		quantity<si::acceleration> ax;
+        	quantity<si::acceleration> ay;
+        	quantity<si::angular_acceleration> wz;
+		
+		ax = acceleration.x * meter_per_second_squared;
+        	ay = acceleration.y * meter_per_second_squared;
+        	wz = acceleration.z * radian_per_second/second;
+
+	try
+        {
+            youBotConfiguration.baseConfiguration.youBotBase->setBaseAcceleration(ax,ay,wz);
+        }
+        catch (std::exception& e)
+        {
+            std::string errorMessage = e.what();
+            ROS_WARN("Cannot set base forces: %s", errorMessage.c_str());
+        }
+		
+		//ROS_WARN("No interface present yet \n");
+	}
+	else
+	    {
+		ROS_ERROR("No base initialized!");
+	    }
+
 }
 
 void YouBotOODLWrapper::baseWrenchCallback(const geometry_msgs::Wrench& youbotWrenchCommand){
@@ -810,12 +843,13 @@ void YouBotOODLWrapper::computeRobotWrench(sensor_msgs::JointState effort)
         /* Fill the wrench values */
          baseWrenchMessage.header.stamp = currentTime;
          baseWrenchMessage.header.frame_id = youBotOdometryFrameID;
-         baseWrenchMessage.wrench.force.x = 0.01;
-	 baseWrenchMessage.wrench.force.y = 0.01;
+         
+         baseWrenchMessage.wrench.force.x = effort.effort[0] + effort.effort[1] + effort.effort[2] + effort.effort[3];
+	 baseWrenchMessage.wrench.force.y = effort.effort[0] + effort.effort[1] + effort.effort[2] + effort.effort[3];
 	 baseWrenchMessage.wrench.force.z = 0.0;
 	 baseWrenchMessage.wrench.torque.x = 0.0;
          baseWrenchMessage.wrench.torque.y = 0.0;
-         baseWrenchMessage.wrench.torque.z = 0.01;
+         baseWrenchMessage.wrench.torque.z = effort.effort[0] + effort.effort[1] + effort.effort[2] + effort.effort[3];
          
 
 
