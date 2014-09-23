@@ -834,22 +834,23 @@ void YouBotOODLWrapper::gripperPositionsCommandCallback(const brics_actuator::Jo
 
 void YouBotOODLWrapper::computeRobotWrench(sensor_msgs::JointState effort)
 {
-
+	quantity<si::force> fx;
+	quantity<si::force> fy;
+	
 	try{
       
-        /* Set up wrench tf */
-
        
+        youBotConfiguration.baseConfiguration.youBotBase->getBaseWrench(fx,fy);
         /* Fill the wrench values */
          baseWrenchMessage.header.stamp = currentTime;
          baseWrenchMessage.header.frame_id = youBotOdometryFrameID;
          
-         baseWrenchMessage.wrench.force.x = effort.effort[0] + effort.effort[1] + effort.effort[2] + effort.effort[3];
-	 baseWrenchMessage.wrench.force.y = effort.effort[0] + effort.effort[1] + effort.effort[2] + effort.effort[3];
+         baseWrenchMessage.wrench.force.x = fx.value();
+	 baseWrenchMessage.wrench.force.y = fy.value();
 	 baseWrenchMessage.wrench.force.z = 0.0;
 	 baseWrenchMessage.wrench.torque.x = 0.0;
          baseWrenchMessage.wrench.torque.y = 0.0;
-         baseWrenchMessage.wrench.torque.z = effort.effort[0] + effort.effort[1] + effort.effort[2] + effort.effort[3];
+         baseWrenchMessage.wrench.torque.z = 0.0; // not implemented yet
          
 
 
