@@ -843,10 +843,10 @@ void YouBotOODLWrapper::computeRobotWrench(sensor_msgs::JointState effort)
         youBotConfiguration.baseConfiguration.youBotBase->getBaseWrench(fx,fy);
         /* Fill the wrench values */
          baseWrenchMessage.header.stamp = currentTime;
-         baseWrenchMessage.header.frame_id = youBotOdometryFrameID;
+         baseWrenchMessage.header.frame_id = "base_link";
          
-         baseWrenchMessage.wrench.force.x = fx.value();
-	 baseWrenchMessage.wrench.force.y = fy.value();
+         baseWrenchMessage.wrench.force.x = fx.value()/10;
+	 baseWrenchMessage.wrench.force.y = fy.value()/10;
 	 baseWrenchMessage.wrench.force.z = 0.0;
 	 baseWrenchMessage.wrench.torque.x = 0.0;
          baseWrenchMessage.wrench.torque.y = 0.0;
